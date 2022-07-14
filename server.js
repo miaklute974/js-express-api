@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const axios = require('axios');
+const { google } = require("googleapis");
 
 
 const config = {
@@ -17,6 +18,28 @@ const HEADERS = {
     "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
 };
 
+
+/******************************Google Sheets*************************************/
+// https://console.developers.google.com/iam-admin/iam/ create a service account, share with the service accounts email.
+
+
+const auth = new google.auth.GoogleAuth({
+    keyFile: "creds.json", //the key file
+    //url to spreadsheets API
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
+});
+
+//Auth client Object
+const authClientObject = auth.getClient();
+
+//Google sheets instance
+const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
+
+// spreadsheet id
+const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
+
+/********************************************************************************/
+
 const app = express();
 const logger = log({ console: true, file: false, label: config.name });
 
@@ -28,12 +51,27 @@ app.get('/', (req, res) => {
     res.json({ "sanity": "check" });
 });
 
+
 //handle webhook from shortcut, call function to send to sheets
-app.post('/webhook',  async (req, res) => {
+app.post('/webhook', async (req, res) => {
     var body = req.body;
     await sendToSheets(body.actions[0].id)
     res.send(body);
 });
+
+async function writeGoogleSheet() {
+    //write data into the google sheets
+    googleSheetsInstance.spreadsheets.values.append({
+        auth, //auth object
+        spreadsheetId, //spreadsheet id
+        range: "Sheet1!A:B", //sheet name and range of cells
+        valueInputOption: "USER_ENTERED", // The information will be passed according to what the user passes in as date, number or text
+        resource: {
+            values: [["Hello", "Sheets"]],
+        },
+    });
+
+};
 
 
 async function getStory(id) {
@@ -66,6 +104,7 @@ async function getStory(id) {
     return story
 
 };
+
 
 // TODO: make this filter on a specific ID. I believe this returns a list of owners. Defaulting to the first index of the JSON within getStory() currently.
 async function getOwner() {
@@ -105,21 +144,9 @@ async function sendToSheets(id) {
                 console.error(err);
             });
     });
-    
 
-    // console.log(story);
 };
 
-
-
-
-
-// story =  getStory(13)
-// console.log(story)
-// getEpic(12)
-
-
-//https://api.app.shortcut.com/api/v3/stories/{story-public-id}
 
 app.listen(config.port, config.host, (e) => {
     if (e) {

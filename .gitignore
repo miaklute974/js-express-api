@@ -65,3 +65,5 @@ node_modules
 .idea
 .DS_STORE
 log
+creds
+creds.json
