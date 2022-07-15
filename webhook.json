@@ -1,0 +1,55 @@
+{
+	"id": "62cf1c24-79e8-4381-95cc-899c98d2b4a3",
+	"changed_at": "2022-07-13T19:25:24.214Z",
+	"version": "v1",
+	"primary_id": 13,
+	"member_id": "62cd9e24-feb0-4d26-b20a-736981175aa0",
+	"actions": [
+		{
+			"id": 13,
+			"entity_type": "story",
+			"action": "update",
+			"name": "[Sample] Story",
+			"story_type": "chore",
+			"app_url": "https://app.shortcut.com/steelederic/story/13",
+			"changes": {
+				"completed_at": {
+					"new": "2022-07-13T19:25:24Z"
+				},
+				"completed": {
+					"new": true,
+					"old": false
+				},
+				"started": {
+					"new": true,
+					"old": false
+				},
+				"position": {
+					"new": 62147483646,
+					"old": 22147483648
+				},
+				"workflow_state_id": {
+					"new": 500000011,
+					"old": 500000007
+				},
+				"started_at": {
+					"new": "2022-07-13T19:25:24Z"
+				}
+			}
+		}
+	],
+	"references": [
+		{
+			"id": 500000011,
+			"entity_type": "workflow-state",
+			"name": "Completed",
+			"type": "done"
+		},
+		{
+			"id": 500000007,
+			"entity_type": "workflow-state",
+			"name": "Ready for Development",
+			"type": "unstarted"
+		}
+	]
+}
