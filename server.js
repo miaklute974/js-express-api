@@ -12,6 +12,7 @@ const config = {
     host: '0.0.0.0',
 };
 
+const WEBHOOK_SITE_URL = 'https://webhook.site/55975038-ffb3-4ee9-80b8-e4ad79c1a0e8'
 const API_URL = 'https://api.app.shortcut.com/api/v3';
 const HEADERS = {
     "Content-Type": "Application/json",
@@ -20,7 +21,8 @@ const HEADERS = {
 
 
 /******************************Google Sheets*************************************/
-// https://console.developers.google.com/iam-admin/iam/ create a service account, share with the service accounts email.
+// https://console.developers.google.com/iam-admin/iam/ create a service account, 
+// share with the service accounts email.
 
 
 const auth = new google.auth.GoogleAuth({
@@ -34,11 +36,10 @@ const authClientObject = auth.getClient();
 
 //Google sheets instance
 const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
-
-// spreadsheet id
 const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
 
 /********************************************************************************/
+
 
 const app = express();
 const logger = log({ console: true, file: false, label: config.name });
@@ -51,25 +52,51 @@ app.get('/', (req, res) => {
     res.json({ "sanity": "check" });
 });
 
-
+//https://shortcut.com/api/webhook/v1#Clubhouse-Outgoing-Webhooks
 //handle webhook from shortcut, call function to send to sheets
 app.post('/webhook', async (req, res) => {
     var body = req.body;
-    await sendToSheets(body.actions[0].id)
+    await writeGoogleSheet(body.actions[0].id)
     res.send(body);
 });
 
-async function writeGoogleSheet() {
-    //write data into the google sheets
-    googleSheetsInstance.spreadsheets.values.append({
-        auth, //auth object
-        spreadsheetId, //spreadsheet id
-        range: "Sheet1!A:B", //sheet name and range of cells
-        valueInputOption: "USER_ENTERED", // The information will be passed according to what the user passes in as date, number or text
-        resource: {
-            values: [["Hello", "Sheets"]],
-        },
+
+//simulating sending to sheets
+async function sendToSheets(id) {
+    await getStory(id).then((res) => {
+        sheets = axios.post(WEBHOOK_SITE_URL, JSON.stringify(res)) // this seems stupid but axios bitched
+            .then((res) => {
+                console.log(`Status: ${res.status}`);
+            }).catch((err) => {
+                console.error(err);
+            });
     });
+
+};
+
+
+async function writeGoogleSheet(id) {
+    //write data into the google sheets
+    //Array()
+    await getStory(id).then((res) => {
+        data = ["1", "1", "1", "1", "1", "1",]
+        googleSheetsInstance.spreadsheets.values.append({
+            auth,
+            spreadsheetId,
+            range: "Sheet1!A:Z", //sheet name and range of cells
+            valueInputOption: "USER_ENTERED", // The information will be passed according to what the user passes in as date, number or text
+            resource: {
+                values: [res],
+            }
+        }).then((res) => {
+            console.log(`Status: ${res.status}`);
+        }).catch((err) => {
+            console.error(err);
+        }); // this seems stupid but axios bitched
+
+    });
+
+
 
 };
 
@@ -88,20 +115,20 @@ async function getStory(id) {
     requester = await getOwner(res.data.requested_by_id)
     epic = await getEpic(res.data.epic_id)
 
-    let story = {
-        'story_id': res.data.id,
-        'story_name': res.data.name,
-        'story_type': res.data.story_type,
-        'requester_id': requester.name,
-        'owners': owner.name,
-        'is_completed': res.data.completed,
-        'external_tickets': res.data.external_links,
-        'epic_id': res.data.epic_id,
-        'epic_name': epic.name
-    }
+    let story = [
+        res.data.id,
+        res.data.name,
+        res.data.story_type,
+        requester.name,
+        owner.name,
+        res.data.completed.toString(),
+        res.data.external_links.toString(),
+        res.data.epic_id,
+        epic.name
+    ]
 
-    //console.log(story);
     return story
+    
 
 };
 
@@ -132,19 +159,6 @@ async function getEpic(id) {
     let res = await axios(config)
 
     return { 'name': res.data.name }
-};
-
-//simulating sending to sheets
-async function sendToSheets(id) {
-    await getStory(id).then((res) => {
-        sheets = axios.post('https://webhook.site/9f6005cd-4464-4140-a1a9-aa3c391d173b', JSON.stringify(res)) // this seems stupid but axios bitched
-            .then((res) => {
-                console.log(`Status: ${res.status}`);
-            }).catch((err) => {
-                console.error(err);
-            });
-    });
-
 };
 
 
