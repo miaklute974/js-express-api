@@ -23,7 +23,7 @@ const HEADERS = {
 /******************************Google Sheets*************************************/
 // https://console.developers.google.com/iam-admin/iam/ create a service account, 
 // share with the service accounts email.
-
+// ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
 
 const auth = new google.auth.GoogleAuth({
     keyFile: "creds.json", //the key file
@@ -37,7 +37,6 @@ const authClientObject = auth.getClient();
 //Google sheets instance
 const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
 const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
-
 /********************************************************************************/
 
 
@@ -56,15 +55,15 @@ app.get('/', (req, res) => {
 //handle webhook from shortcut, call function to send to sheets
 app.post('/webhook', async (req, res) => {
     var body = req.body;
-    await writeGoogleSheet(body.actions[0].id)
+    await writeGoogleSheet(body.actions[0].id);
     res.send(body);
 });
 
 
-//simulating sending to sheets
+//simulating sending to sheets to webhook.site
 async function sendToSheets(id) {
     await getStory(id).then((res) => {
-        sheets = axios.post(WEBHOOK_SITE_URL, JSON.stringify(res)) // this seems stupid but axios bitched
+        sheets = axios.post(WEBHOOK_SITE_URL, JSON.stringify(res))
             .then((res) => {
                 console.log(`Status: ${res.status}`);
             }).catch((err) => {
@@ -77,9 +76,13 @@ async function sendToSheets(id) {
 
 async function writeGoogleSheet(id) {
     //write data into the google sheets
-    //Array()
     await getStory(id).then((res) => {
-        data = ["1", "1", "1", "1", "1", "1",]
+        console.log(res)
+        if (res[2] == "chore" || res[5] == 'false') {
+            console.log(`{story_type: ${res[2]}, is_complete: ${res[5]}}`)
+            return false
+        }
+
         googleSheetsInstance.spreadsheets.values.append({
             auth,
             spreadsheetId,
@@ -92,7 +95,7 @@ async function writeGoogleSheet(id) {
             console.log(`Status: ${res.status}`);
         }).catch((err) => {
             console.error(err);
-        }); // this seems stupid but axios bitched
+        });
 
     });
 
@@ -100,7 +103,7 @@ async function writeGoogleSheet(id) {
 
 };
 
-
+//grabs story ID (from shortcut webhook) and generates a payload to be sent to googlesheets api
 async function getStory(id) {
 
     const config = {
@@ -128,7 +131,6 @@ async function getStory(id) {
     ]
 
     return story
-    
 
 };
 
