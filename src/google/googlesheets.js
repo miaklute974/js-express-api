@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-
+const { getStory } = require("./../funcs/shortcut")
 /******************************Google Sheets*************************************/
 
 // https://console.developers.google.com/iam-admin/iam/ create a service account, 
@@ -21,5 +21,49 @@ const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
 
 /********************************************************************************/
 
+//simulating sending to sheets google via  webhook.site
+async function sendToSheets(id) {
+    await getStory(id).then((res) => {
+        sheets = axios.post(WEBHOOK_SITE_URL, JSON.stringify(res))
+            .then((res) => {
+                console.log(`Status: ${res.status}`);
+            }).catch((err) => {
+                console.error(err);
+            });
+    });
 
-module.exports = {auth, authClientObject, googleSheetsInstance, spreadsheetId}
+};
+
+
+async function writeGoogleSheet(id) {
+    //write data into the google sheets
+    await getStory(id).then((res) => {
+        console.log(res)
+        if (res[2] == "chore" || res[5] == 'false') {
+            console.log(`{story_type: ${res[2]}, is_complete: ${res[5]}}`)
+            return false
+        }
+
+        googleSheetsInstance.spreadsheets.values.append({
+            auth,
+            spreadsheetId,
+            range: "Sheet1!A:Z", //sheet name and range of cells
+            valueInputOption: "USER_ENTERED", // The information will be passed according to what the user passes in as date, number or text
+            resource: {
+                values: [res], //this is actually an array of arrays
+            }
+        }).then((res) => {
+            console.log(`Status: ${res.status}`);
+            return true
+        }).catch((err) => {
+            console.error(err);
+        });
+
+    });
+
+
+
+};
+
+
+module.exports = { auth, authClientObject, googleSheetsInstance, spreadsheetId, writeGoogleSheet, sendToSheets}

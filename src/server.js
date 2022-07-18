@@ -2,9 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-const axios = require('axios');
-const { google } = require("googleapis");
-const {sendToSheets, writeGoogleSheet, getEpic, getOwner, getStory} = require("./funcs/shortcut")
+const {sendToSheets, writeGoogleSheet} = require("./google/googlesheets")
 
 
 const config = {
@@ -12,35 +10,6 @@ const config = {
     port: 3000,
     host: '0.0.0.0',
 };
-
-const WEBHOOK_SITE_URL = 'https://webhook.site/55975038-ffb3-4ee9-80b8-e4ad79c1a0e8'
-const API_URL = 'https://api.app.shortcut.com/api/v3';
-const HEADERS = {
-    "Content-Type": "Application/json",
-    "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
-};
-
-
-/******************************Google Sheets*************************************/
-
-// https://console.developers.google.com/iam-admin/iam/ create a service account, 
-// share with the service accounts email.
-// ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
-
-const auth = new google.auth.GoogleAuth({
-    keyFile: "creds.json", //the key file
-    //url to spreadsheets API
-    scopes: "https://www.googleapis.com/auth/spreadsheets",
-});
-
-//Auth client Object
-const authClientObject = auth.getClient();
-
-//Google sheets instance
-const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
-const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
-
-/********************************************************************************/
 
 
 const app = express();
