@@ -2,11 +2,8 @@ https://developers.google.com/sheets/api/samples/writing
 
 ##### Run
 ```
-docker-compose up
+Install dependencies via npm install
+docker-compose build
+docker-compose up 
 ```
 
-##### Other Commands
-```
-docker-compose up -d 
-docker-compose down 
-```
