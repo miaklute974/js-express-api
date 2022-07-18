@@ -1,5 +1,6 @@
 https://developers.google.com/sheets/api/samples/writing
-
+##### Usage
+Listens for webhooks from app.shortcut.com for story changes, handles the requests, and appends information to a googlesheet based on completion status and story type.
 ##### Run
 ```
 Obtain a shortcut API Token -> env var SHORTCUT_API_TOKEN
