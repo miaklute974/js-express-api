@@ -5,7 +5,6 @@ const { getStory } = require("../shortcut/shortcut")
 
 // https://console.developers.google.com/iam-admin/iam/ create a service account, 
 // share with the service accounts email.
-// ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
 
 const auth = new google.auth.GoogleAuth({
     // keyFile: "creds.json", //the key file
@@ -23,7 +22,7 @@ const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID
 /********************************************************************************/
 
 
-//simulating sending to sheets google via  webhook.site
+//Used with Shortcut webhook URL to capture data for local debugging.
 async function sendToSheets(id) {
     await getStory(id).then((res) => {
         sheets = axios.post(WEBHOOK_SITE_URL, JSON.stringify(res))

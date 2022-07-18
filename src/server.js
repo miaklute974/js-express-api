@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-const {sendToSheets, writeGoogleSheet} = require("./google/googlesheets") ;
 const webhook = require('./routes/webhook');
 
 const config = {
@@ -24,7 +23,6 @@ app.listen(config.port, config.host, (e) => {
     if (e) {
         throw new Error('Internal Server Error');
     }
-
     logger.info(`${config.name} running on ${config.host}:${config.port}`);
 });
 
