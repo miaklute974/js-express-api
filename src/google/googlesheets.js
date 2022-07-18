@@ -9,9 +9,9 @@ const { getStory } = require("../shortcut/shortcut")
 // ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
 
 const auth = new google.auth.GoogleAuth({
-    keyFile: "creds.json", //the key file
+    //keyFile: "creds.json", //the key file
     //url to spreadsheets API
-    scopes: "https://www.googleapis.com/auth/spreadsheets",
+    scopes: "https://www.googleapis.com/auth/spreadsheets"
 });
 
 //Auth client Object
@@ -50,7 +50,7 @@ async function writeGoogleSheet(id) {
         googleSheetsInstance.spreadsheets.values.append({
             auth,
             spreadsheetId,
-            range: "Sheet1!A:Z", //sheet name and range of cells
+            range: "Sheet2!A:Z", //sheet name and range of cells. Sheetname should be a variable, naming the sheets should be standardized
             valueInputOption: "USER_ENTERED", // The information will be passed according to what the user passes in as date, number or text
             resource: {
                 values: [res], //this is actually an array of arrays
