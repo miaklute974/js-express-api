@@ -1,4 +1,7 @@
 https://developers.google.com/sheets/api/samples/writing
+https://shortcut.com/api/rest/v3
+https://shortcut.com/api/webhook/v1#Introduction
+
 ##### Usage
 Listens for webhooks from app.shortcut.com for story changes, handles the requests, and appends information to a googlesheet based on completion status and story type.
 ##### Run
