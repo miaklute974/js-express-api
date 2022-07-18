@@ -2,7 +2,7 @@
   "name": "js-express-api",
   "version": "1.0.0",
   "description": "```\r docker-compose up\r ```",
-  "main": "server.js",
+  "main": "src/server.js",
   "dependencies": {
     "@rama41222/node-logger": "^1.0.1",
     "abbrev": "^1.1.1",
@@ -260,15 +260,15 @@
     "yallist": "^2.1.2"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/steelederic/js-express-api.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Eric Steele",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^2.0.19"
