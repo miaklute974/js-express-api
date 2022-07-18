@@ -9,9 +9,9 @@ const { getStory } = require("../shortcut/shortcut")
 // ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
 
 const auth = new google.auth.GoogleAuth({
-    //keyFile: "creds.json", //the key file
+    keyFile: "creds.json", //the key file
     //url to spreadsheets API
-    scopes: "https://www.googleapis.com/auth/spreadsheets"
+    scopes: "https://www.googleapis.com/auth/spreadsheets",
 });
 
 //Auth client Object
