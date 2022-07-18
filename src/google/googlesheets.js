@@ -1,5 +1,7 @@
 const { google } = require("googleapis");
 const { getStory } = require("./../funcs/shortcut")
+
+
 /******************************Google Sheets*************************************/
 
 // https://console.developers.google.com/iam-admin/iam/ create a service account, 
@@ -17,9 +19,10 @@ const authClientObject = auth.getClient();
 
 //Google sheets instance
 const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject });
-const spreadsheetId = "1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ";
+const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID
 
 /********************************************************************************/
+
 
 //simulating sending to sheets google via  webhook.site
 async function sendToSheets(id) {
@@ -66,4 +69,4 @@ async function writeGoogleSheet(id) {
 };
 
 
-module.exports = { auth, authClientObject, googleSheetsInstance, spreadsheetId, writeGoogleSheet, sendToSheets}
+module.exports = { auth, authClientObject, googleSheetsInstance, spreadsheetId, writeGoogleSheet, sendToSheets }

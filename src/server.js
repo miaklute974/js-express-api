@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-const {sendToSheets, writeGoogleSheet} = require("./google/googlesheets")
+const {sendToSheets, writeGoogleSheet} = require("./google/googlesheets") //sendToSheets is only called when debugging
 
 
 const config = {
