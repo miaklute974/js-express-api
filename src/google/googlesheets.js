@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-const { getStory } = require("./../funcs/shortcut")
+const { getStory } = require("../shortcut/shortcut")
 
 
 /******************************Google Sheets*************************************/
