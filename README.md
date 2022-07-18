@@ -13,6 +13,13 @@ Obtain a shortcut API Token -> env var SHORTCUT_API_TOKEN
 Create a google service account and obtain (GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, GOOGLE_SPREADSHEET_ID) as env vars
 Obtain creds.json from the service account and place in the parent directory
 
+.env should have:
+SHORTCUT_API_TOKEN = ''
+GOOGLE_SERVICE_ACCOUNT_EMAIL = ''
+GOOGLE_PRIVATE_KEY = ''
+GOOGLE_SPREADSHEET_ID = ''
+GOOGLE_APPLICATION_CREDENTIALS=creds.json
+
 docker-compose build
 docker-compose up 
 ```

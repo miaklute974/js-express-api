@@ -1,7 +1,6 @@
 const { google } = require("googleapis");
 const { getStory } = require("../shortcut/shortcut")
 
-
 /******************************Google Sheets*************************************/
 
 // https://console.developers.google.com/iam-admin/iam/ create a service account, 
@@ -9,7 +8,7 @@ const { getStory } = require("../shortcut/shortcut")
 // ny-googlesheets-bot@swift-climate-317917.iam.gserviceaccount.com
 
 const auth = new google.auth.GoogleAuth({
-    keyFile: "creds.json", //the key file
+    // keyFile: "creds.json", //the key file
     //url to spreadsheets API
     scopes: "https://www.googleapis.com/auth/spreadsheets",
 });
