@@ -92,7 +92,7 @@
     "fresh": "^0.5.2",
     "get-stream": "^3.0.0",
     "get-value": "^2.0.6",
-    "glob-parent": "^6.0.2",
+    "glob-parent": ">=6.0.1",
     "global-dirs": "^0.1.1",
     "googleapis": "^105.0.0",
     "got": "^12.1.0",
