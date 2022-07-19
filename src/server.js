@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 var cors = require('cors')
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -43,7 +44,18 @@ app.get('/', async (req, res) => {
     console.log(code)
 
     // oauth_token = await token.getToken(code)
-    gsheet = await sheet.writeGoogleSheet()
+    try{
+        gsheet = await sheet.writeGoogleSheet()
+    } catch (error){
+        console.log(error);
+        oauth_token = await token.getToken(code)
+        const new_creds = await JSON.parse(fs.readFileSync('C:\\Users\\NetYield Support\\js\\js-express-api\\src\\google\\google-client-secret.json', 'utf-8'));
+        console.log(`writeToSheets failed; regenerated token : ${new_creds}`)
+        console.log('Trying again...')
+        gsheet = await sheet.writeGoogleSheet()
+
+    }
+    
     res.redirect("/success")
 
 });
@@ -51,7 +63,7 @@ app.get('/', async (req, res) => {
 
 //test if we were successful
 app.get('/success', async (req, res) => {
-    res.json({"Auth": "Success"});
+    res.json({ "Auth": "Success" });
 });
 
 
