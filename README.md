@@ -1,3 +1,7 @@
+
+##
+TODO: Drop google.auth.GoogleAuth in favor of OAuth2 to rid hosting machine of sensitive env vars.
+
 #####
 https://developers.google.com/sheets/api/samples/writing
 #####
