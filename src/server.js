@@ -1,8 +1,14 @@
 require('dotenv').config();
+var cors = require('cors')
 const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const webhook = require('./routes/webhook');
+const url = require("./google/google-oauth-generate-url")
+const token = require("./google/google-oauth-get-tokens")
+const sheet = require("./google/google-sheet")
+
+
 
 const config = {
     name: 'js-express-api',
@@ -18,6 +24,36 @@ const logger = log({ console: true, file: false, label: config.name });
 app.use(bodyParser.json());
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 app.use('/webhook', webhook);
+app.use(cors())
+
+//grab code from sign in to oauth link
+app.get('/auth', async (req, res) => {
+
+    auth_url = await url.generateUrl()
+
+    res.redirect(auth_url)
+    // let code = req.query.code;
+});
+
+
+// I should probably create a route to generate a token, otherwise we are generating the token over and over...
+app.get('/', async (req, res) => {
+
+    let code = req.query.code;
+    console.log(code)
+
+    // oauth_token = await token.getToken(code)
+    gsheet = await sheet.writeGoogleSheet()
+    res.redirect("/success")
+
+});
+
+
+//test if we were successful
+app.get('/success', async (req, res) => {
+    res.json({"Auth": "Success"});
+});
+
 
 app.listen(config.port, config.host, (e) => {
     if (e) {
@@ -25,8 +61,3 @@ app.listen(config.port, config.host, (e) => {
     }
     logger.info(`${config.name} running on ${config.host}:${config.port}`);
 });
-
-//https://webhook.site/ to test live webhook
-//Insomnia to test locally
-
-

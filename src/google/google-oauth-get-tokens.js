@@ -2,9 +2,10 @@ const fs = require('fs');
 const { google } = require('googleapis');
 
 // Replace with the code you've got from the previous step
-const code = '4/0AdQt8qjR4uXIvUxWtoMyrS3rjuB9C0e9dWhG1xFh5T2G0nascoPkwMMjyxHs60xzt6DQoQ';
+// const code = '4/0AdQt8qgCr9uBebihgrzwvyG2i1tcKyFq4w7cgTwivtmrlmxkWgD1ahxg4z29b_voxC2Vcw';
 
-const credentials = JSON.parse(fs.readFileSync('google-client-secret.json', 'utf-8'));
+//abs path
+const credentials = JSON.parse(fs.readFileSync('C:\\Users\\NetYield Support\\js\\js-express-api\\src\\google\\google-client-secret.json', 'utf-8'));
 
 const {
     client_secret: clientSecret,
@@ -16,10 +17,12 @@ const oAuth2Client = new google.auth.OAuth2(
     clientId, clientSecret, redirectUris[0],
 );
 
-const getToken = async () => {
+const getToken = async (code) => {
     const { tokens } = await oAuth2Client.getToken(code);
     console.info(tokens);
     fs.writeFileSync('google-oauth-token.json', JSON.stringify(tokens));
 };
 
-getToken();
+// getToken();
+
+module.exports = { getToken }
