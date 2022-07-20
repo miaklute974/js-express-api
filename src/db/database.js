@@ -16,7 +16,7 @@ const sequelize = new Sequelize(process.env.DB_SCHEMA || 'postgres',
                                     }
                                 });
 
-// models                               
+// TODO: create models dir, import sequelize as db where needed.                               
 const Story = sequelize.define('story', {
     name: {
         type: Sequelize.STRING,
