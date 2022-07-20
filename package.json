@@ -94,6 +94,7 @@
     "get-value": "^2.0.6",
     "glob-parent": ">=6.0.1",
     "global-dirs": "^0.1.1",
+    "globalthis": "^1.0.3",
     "googleapis": "^105.0.0",
     "got": "^12.1.0",
     "graceful-fs": "^4.1.15",

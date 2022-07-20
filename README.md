@@ -20,9 +20,7 @@ Listens for webhooks from app.shortcut.com for story changes, handles the reques
 
 ##### Tests
 ```
-docker run -it -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5432:5432 postgres
-npm run migrate
-npm run test
+docker-compose run api npm run test
 ```
 ##### Run
 ```
