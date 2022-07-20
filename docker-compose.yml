@@ -1,5 +1,14 @@
 version: '3'
 services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - src-db:/var/lib/postgresql/data
   api:
     image: js-express-api
     build: .
@@ -15,6 +24,10 @@ services:
     networks:
       - backend
     command: sh
+
+volumes:
+  src-db:
+
 
 networks:
   backend:

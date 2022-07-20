@@ -67,3 +67,5 @@ node_modules
 log
 creds
 creds.json
+google-client-secret.json
+google-oauth-token.json

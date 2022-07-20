@@ -1,0 +1,55 @@
+// stories.js
+
+const express = require("express");
+const router = express.Router()
+const db = require('../db/database.js');
+
+router.get("/all", function(req, res) {
+    db.Story.findAll()
+        .then( stories => {
+            res.status(200).send(JSON.stringify(stories));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.get("/:id", function(req, res) {
+    db.Story.findByPk(req.params.id)
+        .then( story => {
+            res.status(200).send(JSON.stringify(story));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.put("/", function(req, res) {
+    db.Story.create({
+        name: req.body.name,
+        type: req.body.type,
+        id: req.body.id
+        })
+        .then( story => {
+            res.status(200).send(JSON.stringify(story));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.delete("/:id", function(req, res) {
+    db.Story.destroy({
+        where: {
+            id: req.params.id
+        }
+        })
+        .then( () => {
+            res.status(200).send();
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+module.exports = router;
