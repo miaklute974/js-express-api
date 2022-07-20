@@ -24,38 +24,32 @@ const logger = log({ console: true, file: false, label: config.name });
 // Middleware
 app.use(bodyParser.json());
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
-app.use('/webhook', webhook);
 app.use(cors())
 
 //grab code from sign in to oauth link
 app.get('/auth', async (req, res) => {
-
     auth_url = await url.generateUrl()
-
     res.redirect(auth_url)
-    // let code = req.query.code;
+
 });
 
 
 // I should probably create a route to generate a token, otherwise we are generating the token over and over...
 app.get('/', async (req, res) => {
-
-    let code = req.query.code;
+    var code = req.query.code;
     console.log(code)
 
     // oauth_token = await token.getToken(code)
-    try{
-        gsheet = await sheet.writeGoogleSheet()
-    } catch (error){
+    try {
+        await sheet.writeGoogleSheet()
+    } catch (error) {
         console.log(error);
-        oauth_token = await token.getToken(code)
-        const new_creds = await JSON.parse(fs.readFileSync('C:\\Users\\NetYield Support\\js\\js-express-api\\src\\google\\google-client-secret.json', 'utf-8'));
-        console.log(`writeToSheets failed; regenerated token : ${new_creds}`)
-        console.log('Trying again...')
-        gsheet = await sheet.writeGoogleSheet()
+        await token.getToken(code)
 
+        console.log('Trying again...')
+        await sheet.writeGoogleSheet()
     }
-    
+
     res.redirect("/success")
 
 });
