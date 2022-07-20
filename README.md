@@ -4,7 +4,8 @@
 TODO: 
     Link shortcut webhooks data to db endpoints
     Add iteration model to /db/database.js 
-    Update /google/google-sheet.js to receive necessary story information and logic to append to googlesheets instead of [1,2,3,4,5]
+    Update /google/google-sheet.js to receive necessary story information and 
+    logic to append to googlesheets instead of [1,2,3,4,5]
 ```
 
 #####
