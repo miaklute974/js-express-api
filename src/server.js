@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
 const webhook = require('./routes/webhook');
 const storiesRouter = require('./routes/stories');
+const oAuthTokensRouter = require('./routes/oauth_tokens');
 const url = require("./google/google-oauth-generate-url")
 const token = require("./google/google-oauth-get-tokens")
 const sheet = require("./google/google-sheet")
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 app.use(ExpressAPILogMiddleware(logger, { request: true }));
 app.use(cors())
 app.use('/stories', storiesRouter)
+app.use('/oauth_tokens', oAuthTokensRouter)
 
 //grab code from sign in to oauth link
 app.get('/auth', async (req, res) => {

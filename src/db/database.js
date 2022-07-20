@@ -1,5 +1,6 @@
 // database.js
 // docker run -it -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5432:5432 postgres
+// docker volume rm $(docker volume ls -q) to clean and start over
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
@@ -14,7 +15,9 @@ const sequelize = new Sequelize(process.env.DB_SCHEMA || 'postgres',
                                         ssl: process.env.DB_SSL == "false"
                                     }
                                 });
-const Story = sequelize.define('Story', {
+
+// models                               
+const Story = sequelize.define('story', {
     name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -24,7 +27,31 @@ const Story = sequelize.define('Story', {
         allowNull: true
     },
 });
+
+
+const oAuthToken = sequelize.define('oAuthToken', {
+    access_token: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    scope: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    token_type: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    expiry_date: {
+        type: Sequelize.BIGINT,
+        allowNull: true,
+    }
+});
+
+
+
 module.exports = {
     sequelize: sequelize,
-    Story: Story
+    Story: Story,
+    oAuthToken: oAuthToken
 };

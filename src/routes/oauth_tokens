@@ -1,0 +1,56 @@
+// stories.js
+
+const express = require("express");
+const router = express.Router()
+const db = require('../db/database.js');
+
+router.get("/all", function(req, res) {
+    db.oAuthToken.findAll()
+        .then( oauthtokens => {
+            res.status(200).send(JSON.stringify(oauthtokens));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.get("/:id", function(req, res) {
+    db.oAuthToken.findByPk(req.params.id)
+        .then( oauthtoken => {
+            res.status(200).send(JSON.stringify(oauthtoken));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.put("/", function(req, res) {
+    db.oAuthToken.create({
+        access_token: req.body.access_token,
+        scope: req.body.scope,
+        token_type: req.body.token_type,
+        expiry_date: req.body.expiry_date
+        })
+        .then( oauthtoken => {
+            res.status(200).send(JSON.stringify(oauthtoken));
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+router.delete("/:id", function(req, res) {
+    db.oAuthToken.destroy({
+        where: {
+            id: req.params.id
+        }
+        })
+        .then( () => {
+            res.status(200).send();
+        })
+        .catch( err => {
+            res.status(500).send(JSON.stringify(err));
+        });
+});
+
+module.exports = router;
