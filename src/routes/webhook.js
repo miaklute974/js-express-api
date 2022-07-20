@@ -1,6 +1,6 @@
 
 const express = require("express");
-const {writeGoogleSheet} = require('../google/googlesheets')
+const {writeGoogleSheet} = require('../google/google-sheet')
 // const {sendToSheets, writeGoogleSheet} = require("./google/googlesheets") 
 const router = express.Router()
 

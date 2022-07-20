@@ -1,6 +1,8 @@
 // database.js
-
+// docker run -it -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5432:5432 postgres
 const Sequelize = require('sequelize');
+require('dotenv').config();
+
 const sequelize = new Sequelize(process.env.DB_SCHEMA || 'postgres',
                                 process.env.DB_USER || 'postgres',
                                 process.env.DB_PASSWORD || '',
@@ -9,7 +11,7 @@ const sequelize = new Sequelize(process.env.DB_SCHEMA || 'postgres',
                                     port: process.env.DB_PORT || 5432,
                                     dialect: 'postgres',
                                     dialectOptions: {
-                                        ssl: process.env.DB_SSL == "true"
+                                        ssl: process.env.DB_SSL == "false"
                                     }
                                 });
 const Story = sequelize.define('Story', {
