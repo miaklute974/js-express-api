@@ -12,7 +12,7 @@ const getToken = async (code) => {
 
     const { tokens } = await oAuth2Client.getToken(code);
     console.info(tokens);
-    fs.writeFileSync('google-oauth-token.json', JSON.stringify(tokens), { encoding: 'utf8', flag: 'w' });
+    fs.writeFileSync(`${__dirname}\\google-oauth-token.json`, JSON.stringify(tokens), { encoding: 'utf8', flag: 'w' });
 };
 
 

@@ -12,7 +12,7 @@ router.get('/auth', async (req, res) => {
 });
 
 
-// I should probably create a route to generate a token, otherwise we are generating the token over and over...
+// User wants to update spreadsheet, lands here via /auth, uses credentials to post missing stories.
 router.get('/', async (req, res) => {
     var code = req.query.code;
     console.log(code)
