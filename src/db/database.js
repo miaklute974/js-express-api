@@ -4,7 +4,21 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
-const sequelize = new Sequelize("sqlite::memory:");
+sequelize = new Sequelize(
+  "database",
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: "0.0.0.0",
+    dialect: "sqlite",
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    },
+    storage: "./src/db/database.sqlite3"
+  }
+);
 
 // TODO: create models dir, import sequelize as db where needed.                               
 const Story = sequelize.define('story', {
@@ -14,7 +28,11 @@ const Story = sequelize.define('story', {
     },
     type: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: false
+    },
+    story_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
     },
 });
 

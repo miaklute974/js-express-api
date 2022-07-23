@@ -28,7 +28,7 @@ router.put("/", function(req, res) {
     db.Story.create({
         name: req.body.name,
         type: req.body.type,
-        id: req.body.id
+        story_id: req.body.story_id
         })
         .then( story => {
             res.status(200).send(JSON.stringify(story));
