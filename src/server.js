@@ -4,7 +4,7 @@ var cors = require('cors')
 const express = require('express');
 const bodyParser = require('body-parser');
 const { log, ExpressAPILogMiddleware } = require('@rama41222/node-logger');
-const webhook = require('./routes/webhook');
+const webhookRouter = require('./routes/webhook');
 const storiesRouter = require('./routes/stories');
 const googleRouter = require('./routes/google');
 const oAuthTokensRouter = require('./routes/oauth_tokens');
@@ -26,6 +26,7 @@ app.use(cors())
 app.use('/stories', storiesRouter)
 app.use('/oauth_tokens', oAuthTokensRouter)
 app.use('/', googleRouter)
+app.use('/', webhookRouter)
 
 
 app.listen(config.port, config.host, (e) => {
