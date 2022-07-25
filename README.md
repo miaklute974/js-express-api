@@ -2,7 +2,7 @@
 ##
 ```
 TODO: 
-    Link shortcut webhooks data to db endpoints
+    Link shortcut webhooks data to db endpoints (This is complete, just need to change shortcut webhook URL once hosted)
     Add iteration model to /db/database.js 
     Update /google/google-sheet.js to receive necessary story information and 
     logic to append to googlesheets instead of [1,2,3,4,5]
@@ -20,23 +20,22 @@ Listens for webhooks from app.shortcut.com for story changes, handles the reques
 
 ##### Tests
 ```
-docker-compose run api npm run test
+npm run test
 ```
 ##### Run
 ```
-Obtain a shortcut API Token -> env var SHORTCUT_API_TOKEN
+Obtain a shortcut API Token
 Obtain google-client-secret.json from google dev console
 
 .env should have:
-SHORTCUT_API_TOKEN = ''
-GOOGLE_SPREADSHEET_ID = ''
-GOOGLE_AUTH_TOKEN_LOCATION=
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
+SHORTCUT_API_TOKEN 
+GOOGLE_SPREADSHEET_ID 
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
 
 docker-compose build
 docker-compose up 
 
-Or run the services separately as needed.
+Or run the services separately as needed.(Temporarily switched to SQlite for testing)
 ```
 
