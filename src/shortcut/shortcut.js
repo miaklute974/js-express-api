@@ -24,21 +24,25 @@ async function getStory(id) {
     requester = await getOwner(res.data.requested_by_id)
     epic = await getEpic(res.data.epic_id)
 
-    story = {
-        story_id: res.data.id,
-        name: res.data.name,
-        story_type: res.data.story_type,
-        requester_name: requester.data.name,
-        owner_name: owner.data.name,
-        is_completed: res.data.completed.toString(),
-        external_links: res.data.external_links.toString(),
-        epic_id: epic.data.id, 
-        epic_name: epic.data.name 
+    try{
+        story = {
+            story_id: res.data.id,
+            name: res.data.name,
+            story_type: res.data.story_type,
+            requester_name: requester.data.name,
+            owner_name: owner.data.name,
+            is_completed: res.data.completed.toString(),
+            external_links: res.data.external_links.toString(),
+            epic_id: epic.data.id, 
+            epic_name: epic.data.name 
+        }
+        console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
+        return story
+
+    } catch{
+        console.log('Error forming story object.')
+        return false
     }
-    console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
-
-    return story
-
 
 };
 
