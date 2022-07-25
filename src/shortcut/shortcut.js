@@ -1,10 +1,11 @@
 const axios = require('axios');
-
+require('dotenv').config();
 const HEADERS = {
     "Content-Type": "Application/json",
     "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
 };
 
+console.log(`DEBUG - SHORTCUT_API_TOKEN=${process.env.SHORTCUT_API_TOKEN}`)
 
 //grabs story ID (from shortcut webhook) and generates a payload to be sent to /webhook route
 async function getStory(id) {
@@ -17,6 +18,10 @@ async function getStory(id) {
 
     let res = await axios(config)
 
+    if (res.data.is_completed != "true"){
+        console.log('story is not complete.')
+        return false
+    }
     owner = await getOwner(res.data.owner_ids[0])
     requester = await getOwner(res.data.requested_by_id)
     epic = await getEpic(res.data.epic_id)

@@ -12,7 +12,6 @@ router.post('/webhook', async (req, res) => {
     console.log(storyID)
 
     story = await getStory(req.body.primary_id)
-    //console.log(`Received ${story}`)
     try{
         await axios.put('http://localhost:3000/stories', story)
     }catch{
