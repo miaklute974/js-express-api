@@ -69,3 +69,4 @@ creds
 creds.json
 google-client-secret.json
 google-oauth-token.json
+database.sqlite3

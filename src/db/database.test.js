@@ -9,18 +9,31 @@ beforeAll(async () => {
 test('create story', async () => {
     expect.assertions(1);
     const story = await db.Story.create({
-        id: 1,
+        story_id: 123,
         name: 'test story',
-        type: 'feature'
+        story_type: 'feature',
+        requester_name: 'Ben Sero',
+        owner_name: 'Eric Steele',
+        is_completed: 'true',
+        external_links: 'https://google.com',
+        epic_id: '123123',
+        epic_name: 'ABC',
     });
     expect(story.id).toEqual(1);
 });
 
 test('get story', async () => {
-    expect.assertions(2);
+    expect.assertions(9);
     const story = await db.Story.findByPk(1);
+    expect(story.story_id).toEqual(123);
     expect(story.name).toEqual('test story');
-    expect(story.type).toEqual('feature');
+    expect(story.story_type).toEqual('feature');
+    expect(story.requester_name).toEqual('Ben Sero');
+    expect(story.owner_name).toEqual('Eric Steele');
+    expect(story.is_completed).toEqual('true');
+    expect(story.external_links).toEqual('https://google.com');
+    expect(story.epic_id).toEqual('123123');
+    expect(story.epic_name).toEqual('ABC');
 });
 
 test('delete story', async () => {
