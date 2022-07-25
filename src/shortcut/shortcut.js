@@ -16,29 +16,29 @@ async function getStory(id) {
         url: `https://api.app.shortcut.com/api/v3/stories/${id}`,
         headers: HEADERS
     }
-    
-    let res =  await axios(config)
+
+    let res = await axios(config)
     console.log(`res is ${res.data}`)
 
-    owner =  await getOwner(res.data.owner_ids[0])
-    requester =  await getOwner(res.data.requested_by_id)
-    epic =  await getEpic(res.data.epic_id)
+    owner = await getOwner(res.data.owner_ids[0])
+    requester = await getOwner(res.data.requested_by_id)
+    epic = await getEpic(res.data.epic_id)
 
     story = {
         story_id: res.data.id,
         name: res.data.name,
         story_type: res.data.story_type,
-        requester_name: requester.name,
-        owner_name: owner.name,
+        requester_name: requester.data.name,
+        owner_name: owner.data.name,
         is_completed: res.data.completed.toString(),
         external_links: res.data.external_links.toString(),
-        epic_id: epic.data.id,//epic.id,
-        epic_name: epic.data.name//epic.name,
+        epic_id: epic.data.id, 
+        epic_name: epic.data.name 
     }
     console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
 
     return story
-    
+
 
 };
 
@@ -52,10 +52,16 @@ async function getOwner() {
         headers: HEADERS
     }
 
-    let res = await axios(config)
+    try {
+        let res = await axios(config)
+        return res
 
-    return { 'name': res.data.name }
-};
+    } catch {
+        epic = { "name": "N/A" }
+        return epic
+    }
+
+}
 
 
 async function getEpic(id) {
@@ -66,10 +72,26 @@ async function getEpic(id) {
         headers: HEADERS
     }
 
-    let res = await axios(config)
+    try {
+        let res = await axios(config)
+        return res
+
+    } catch {
+        epic = { "name": "N/A", "id": "N/A" }
+        return epic
+
+    }
+
+
+
+
+
+
 
     //return { 'name': res.data.name }
-    return res
+
 };
 
 module.exports = { getEpic, getOwner, getStory }
+
+
