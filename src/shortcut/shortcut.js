@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const HEADERS = {
     "Content-Type": "Application/json",
-    "Shortcut-Token": "62deda69-bfc8-43d2-bbf6-4397bd0c1d33"
+    "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
 };
 
 
