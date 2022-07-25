@@ -1,11 +1,12 @@
 const axios = require('axios');
 require('dotenv').config();
+
+
 const HEADERS = {
     "Content-Type": "Application/json",
-    "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
+    "Shortcut-Token": "62deda69-bfc8-43d2-bbf6-4397bd0c1d33"
 };
 
-console.log(`DEBUG - SHORTCUT_API_TOKEN=${process.env.SHORTCUT_API_TOKEN}`)
 
 //grabs story ID (from shortcut webhook) and generates a payload to be sent to /webhook route
 async function getStory(id) {
@@ -15,16 +16,13 @@ async function getStory(id) {
         url: `https://api.app.shortcut.com/api/v3/stories/${id}`,
         headers: HEADERS
     }
+    
+    let res =  await axios(config)
+    console.log(`res is ${res.data}`)
 
-    let res = await axios(config)
-
-    if (res.data.is_completed != "true"){
-        console.log('story is not complete.')
-        return false
-    }
-    owner = await getOwner(res.data.owner_ids[0])
-    requester = await getOwner(res.data.requested_by_id)
-    epic = await getEpic(res.data.epic_id)
+    owner =  await getOwner(res.data.owner_ids[0])
+    requester =  await getOwner(res.data.requested_by_id)
+    epic =  await getEpic(res.data.epic_id)
 
     story = {
         story_id: res.data.id,
@@ -34,12 +32,13 @@ async function getStory(id) {
         owner_name: owner.name,
         is_completed: res.data.completed.toString(),
         external_links: res.data.external_links.toString(),
-        epic_id: res.data.epic_id,
-        epic_name: epic.name,
+        epic_id: epic.data.id,//epic.id,
+        epic_name: epic.data.name//epic.name,
     }
     console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
 
     return story
+    
 
 };
 
@@ -69,7 +68,8 @@ async function getEpic(id) {
 
     let res = await axios(config)
 
-    return { 'name': res.data.name }
+    //return { 'name': res.data.name }
+    return res
 };
 
 module.exports = { getEpic, getOwner, getStory }
