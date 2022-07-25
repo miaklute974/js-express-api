@@ -1,16 +1,12 @@
 const axios = require('axios');
 
-
-const WEBHOOK_SITE_URL = 'https://webhook.site/55975038-ffb3-4ee9-80b8-e4ad79c1a0e8'
-const API_URL = 'https://api.app.shortcut.com/api/v3';
 const HEADERS = {
     "Content-Type": "Application/json",
     "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
 };
 
 
-
-//grabs story ID (from shortcut webhook) and generates a payload to be sent to googlesheets api
+//grabs story ID (from shortcut webhook) and generates a payload to be sent to /webhook route
 async function getStory(id) {
 
     const config = {
@@ -25,17 +21,18 @@ async function getStory(id) {
     requester = await getOwner(res.data.requested_by_id)
     epic = await getEpic(res.data.epic_id)
 
-    let story = [
-        res.data.id,
-        res.data.name,
-        res.data.story_type,
-        requester.name,
-        owner.name,
-        res.data.completed.toString(),
-        res.data.external_links.toString(),
-        res.data.epic_id,
-        epic.name
-    ]
+    story = {
+        story_id: res.data.id,
+        name: res.data.name,
+        story_type: res.data.story_type,
+        requester_name: requester.name,
+        owner_name: owner.name,
+        is_completed: res.data.completed.toString(),
+        external_links: res.data.external_links.toString(),
+        epic_id: res.data.epic_id,
+        epic_name: epic.name,
+    }
+    console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
 
     return story
 
