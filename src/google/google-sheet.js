@@ -29,7 +29,7 @@ async function writeGoogleSheet(id) {
     range: "Sheet1!A:Z",
     valueInputOption: "USER_ENTERED",
     resource: {
-      values: [[1, 2, 3, 4, 5]], //this is actually an array of arrays
+      values: [[1, 2, 3, 4, 5]], //this will be an array of arrays from DB on stories we want.
     }
   }).then((res) => {
     console.log(`Status: ${res.status}`);

@@ -3,7 +3,6 @@ require('dotenv').config();
 const { google } = require('googleapis');
 
 
-
 const getToken = async (code) => {
     const redirectUris = ['http://localhost:3000', 'http://localhost:3000/success']
     const oAuth2Client = new google.auth.OAuth2(

@@ -48,9 +48,7 @@ test('delete story', async () => {
 });
 
 
-
 //******************uAuthTokens*****************//
-// this is probably going to fail until i spin up a brand new postgres image with a migration
 test('create oAuthtoken', async () => {
     expect.assertions(1);
     const oauthtoken = await db.oAuthToken.create({

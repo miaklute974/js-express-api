@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
     var code = req.query.code;
     console.log(code)
 
-    // oauth_token = await token.getToken(code)
     try {
         await sheet.writeGoogleSheet()
     } catch (error) {
@@ -33,7 +32,6 @@ router.get('/', async (req, res) => {
 });
 
 
-//test if we were successful
 router.get('/success', async (req, res) => {
     res.json({ "Auth": "Success" });
 });

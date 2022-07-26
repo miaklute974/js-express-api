@@ -85,15 +85,6 @@ async function getEpic(id) {
         return epic
 
     }
-
-
-
-
-
-
-
-    //return { 'name': res.data.name }
-
 };
 
 module.exports = { getEpic, getOwner, getStory }

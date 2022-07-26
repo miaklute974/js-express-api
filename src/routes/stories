@@ -1,30 +1,28 @@
-// stories.js
-
 const express = require("express");
 const router = express.Router()
 const db = require('../db/database.js');
 
-router.get("/all", function(req, res) {
+router.get("/all", function (req, res) {
     db.Story.findAll()
-        .then( stories => {
+        .then(stories => {
             res.status(200).send(JSON.stringify(stories));
         })
-        .catch( err => {
+        .catch(err => {
             res.status(500).send(JSON.stringify(err));
         });
 });
 
-router.get("/:id", function(req, res) {
+router.get("/:id", function (req, res) {
     db.Story.findByPk(req.params.id)
-        .then( story => {
+        .then(story => {
             res.status(200).send(JSON.stringify(story));
         })
-        .catch( err => {
+        .catch(err => {
             res.status(500).send(JSON.stringify(err));
         });
 });
 
-router.put("/", function(req, res) {
+router.put("/", function (req, res) {
     db.Story.create({
         story_id: req.body.story_id,
         name: req.body.name,
@@ -35,25 +33,25 @@ router.put("/", function(req, res) {
         external_links: req.body.external_links,
         epic_id: req.body.epic_id,
         epic_name: req.body.epic_name,
-        })
-        .then( story => {
+    })
+        .then(story => {
             res.status(200).send(JSON.stringify(story));
         })
-        .catch( err => {
+        .catch(err => {
             res.status(500).send(JSON.stringify(err));
         });
 });
 
-router.delete("/:id", function(req, res) {
+router.delete("/:id", function (req, res) {
     db.Story.destroy({
         where: {
             id: req.params.id
         }
-        })
-        .then( () => {
+    })
+        .then(() => {
             res.status(200).send();
         })
-        .catch( err => {
+        .catch(err => {
             res.status(500).send(JSON.stringify(err));
         });
 });

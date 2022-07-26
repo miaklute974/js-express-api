@@ -1,6 +1,3 @@
-// database.js
-// docker run -it -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5432:5432 postgres
-// docker volume rm $(docker volume ls -q) to clean and start over
 const Sequelize = require('sequelize');
 require('dotenv').config();
 
@@ -20,7 +17,7 @@ sequelize = new Sequelize(
     }
 );
 
-// TODO: create models dir, import sequelize as db where needed.                               
+
 const Story = sequelize.define('story', {
     story_id: {
         type: Sequelize.INTEGER,
