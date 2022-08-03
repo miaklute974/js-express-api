@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const { google } = require('googleapis');
+require('./../shortcut/shortcut')
 require('dotenv').config();
 require("./google-oauth-generate-url")
 
@@ -15,6 +16,19 @@ async function getAuth() {
   const token = fs.readFileSync(`${__dirname}\\google-oauth-token.json`, 'utf-8');
   oAuth2Client.setCredentials(JSON.parse(token));
   return oAuth2Client
+};
+
+
+async function readGoogleSheet() {
+
+  oAuth2Client = await getAuth()
+  const sheets = google.sheets({ version: 'v4', auth: oAuth2Client })
+
+  return sheets.spreadsheets.values.get({
+    spreadsheetId: `${process.env.GOOGLE_SPREADSHEET_ID}`,
+    range: "Sheet1!A2:Z100"
+  })
+    .then((_.property('data.values')));
 };
 
 
@@ -43,32 +57,90 @@ async function writeGoogleSheet(id) {
 };
 
 
-async function readGoogleSheet(){
+async function writeIterationToGoogleSheet() {
 
   oAuth2Client = await getAuth()
-  const sheets = google.sheets({version: 'v4', auth: oAuth2Client})
+  const sheets = google.sheets({ version: 'v4', auth: oAuth2Client });
 
+  //Spreadsheet ID of our target
   const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID
 
-  return sheets.spreadsheets.values.get({
-    spreadsheetId: '1tZH-jH4pXOu13nU1m9WA_FuxranFRd-rBGkEdVptfrQ',
-    range: "Sheet1!A1:Z100"
-  })
-  .then((_.property('data.values')));
+  storyArray = await foo()
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId,
+    range: "Sheet1!A:Z",
+    valueInputOption: "USER_ENTERED",
+    resource: {
+      values: storyArray, //[dataArray],
+    }
+  }).then((res) => {
+    console.log(`Status: ${res.status}`);
+    return true
+  }).catch((err) => {
+    console.error(err);
+  });
+
 };
 
-async function foo() {
-  data = await readGoogleSheet()
-  .then((res) => {
-    // console.log(res)
-    res.forEach(element => {
-      console.log(element)
-      
+
+const axios = require('axios');
+const { foo } = require('./../shortcut/shortcut');
+
+const token = '3Z0WQgO7S5LMCI52xDRuiaqmq5ItIpkxNl-9EpNOK0Q'
+const HEADERS = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
+
+const container = 3009
+const base_url = `https://containers.netyield.com:${container}/api/v2`
+
+
+async function createAccount(gsDataArray) {
+
+  const options = {
+    method: 'POST',
+    url: `${base_url}/accounts`,
+    headers: HEADERS,
+    data: {
+      account_type_id: gsDataArray[0],
+      name: gsDataArray[1],
+      number: gsDataArray[2],
+      active: gsDataArray[3],
+      check_number_index: gsDataArray[4],
+      cost_center_id: gsDataArray[5],
+      wire_number_index: gsDataArray[6]
+    }
+
+  };
+
+  await axios(options)
+    .then((res) => {
+      console.log(JSON.stringify(res.data, null, 4))
+    })
+    .catch((error) => {
+      console.log(error)
     });
-  })
-  
-}
+
+  console.log(options.data)
+
+};
 
 
-foo()
-module.exports = { writeGoogleSheet, getAuth }
+async function createAccountsFromGS() {
+  data = await readGoogleSheet()
+    .then((res) => {
+      res.forEach(element => {
+        console.log(element);
+        createAccount(element)
+          .then((res) => {
+            console.log(res)
+          })
+      });
+    })
+
+};
+
+
+// createAccountsFromGS()
+
+
+module.exports = { writeGoogleSheet, getAuth, writeIterationToGoogleSheet }

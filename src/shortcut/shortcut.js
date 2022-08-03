@@ -1,10 +1,78 @@
 const axios = require('axios');
+const _ = require('lodash')
 require('dotenv').config();
-
 
 const HEADERS = {
     "Content-Type": "Application/json",
     "Shortcut-Token": process.env.SHORTCUT_API_TOKEN
+};
+
+
+/* returns current iteration */
+async function getCurrentIteration() {
+
+    const config = {
+        method: 'get',
+        url: `https://api.app.shortcut.com/api/v3/iterations`,
+        headers: HEADERS
+    }
+
+    //this fails without the callbacks, and the outer return... ?:(
+    let iteration = await axios(config)
+        .then((res) => {
+            // console.log(JSON.stringify(res.data, null, 4))
+            return JSON.stringify(res.data[0].id)
+        }).catch((error) => {
+            console.log(error);
+        });
+
+    return await iteration
+};
+
+
+/* Returns an iteration's story id's in an array given an iteration ID */
+async function getIterationStoryIDs(id) {
+
+    const config = {
+        method: 'get',
+        url: `https://api.app.shortcut.com/api/v3/iterations/${id}/stories`,
+        headers: HEADERS
+    }
+
+    storyIDArray = []
+
+    let stories = await axios(config)
+
+    return await stories
+};
+
+
+async function foo() {
+
+    let storyArray = []
+
+    const id = await getCurrentIteration()
+    const storiesObj = await getIterationStoryIDs(id)
+
+    const storiesArray = storiesObj.data
+
+    storiesArray.forEach(element => {
+        storyArray.push([
+            element.id,
+            element.name,
+            element.story_type,
+            element.requested_by_id.toString(),
+            element.owner_ids.toString(),
+            element.completed,
+            element.external_links.toString(),
+            element.epic_id,
+            'Epic Name'
+        ])
+
+    });
+
+    console.log(storyArray)
+    return storyArray
 };
 
 
@@ -18,13 +86,12 @@ async function getStory(id) {
     }
 
     let res = await axios(config)
-    console.log(`res is ${res.data}`)
 
     owner = await getOwner(res.data.owner_ids[0])
     requester = await getOwner(res.data.requested_by_id)
     epic = await getEpic(res.data.epic_id)
 
-    try{
+    try {
         story = {
             story_id: res.data.id,
             name: res.data.name,
@@ -33,13 +100,12 @@ async function getStory(id) {
             owner_name: owner.data.name,
             is_completed: res.data.completed.toString(),
             external_links: res.data.external_links.toString(),
-            epic_id: epic.data.id, 
-            epic_name: epic.data.name 
+            epic_id: epic.data.id,
+            epic_name: epic.data.name
         }
-        console.log(`Returning story from getStory(). Story = ${JSON.stringify(story, null, 4)}`)
         return story
 
-    } catch{
+    } catch {
         console.log('Error forming story object.')
         return false
     }
@@ -87,6 +153,7 @@ async function getEpic(id) {
     }
 };
 
-module.exports = { getEpic, getOwner, getStory }
+
+module.exports = { getEpic, getOwner, getStory, foo }
 
 

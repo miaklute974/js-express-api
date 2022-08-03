@@ -18,13 +18,13 @@ router.get('/', async (req, res) => {
     console.log(code)
 
     try {
-        await sheet.writeGoogleSheet()
+        await sheet.writeIterationToGoogleSheet()
     } catch (error) {
         console.log(error);
         await token.getToken(code)
 
         console.log('Trying again...')
-        await sheet.writeGoogleSheet()
+        await sheet.writeIterationToGoogleSheet()
     }
 
     res.redirect("/success")
