@@ -3,9 +3,6 @@
 ```
 TODO: 
     Link shortcut webhooks data to db endpoints (This is complete, just need to change shortcut webhook URL once hosted)
-    Add iteration model to /db/database.js 
-    Update /google/google-sheet.js to receive necessary story information and 
-    logic to append to googlesheets instead of [1,2,3,4,5]
 ```
 
 #####
@@ -16,7 +13,7 @@ https://shortcut.com/api/rest/v3
 https://shortcut.com/api/webhook/v1#Introduction
 
 ##### Usage
-Listens for webhooks from app.shortcut.com for story changes, handles the requests, and appends information to a googlesheet based on completion status and story type.
+Read and writes to Googlesheets with data received from Shortcut API, utilizing Google oAuth.
 
 ##### Tests
 ```
