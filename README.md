@@ -2,14 +2,12 @@
 ##
 ```
 TODO: 
-    Link shortcut webhooks data to db endpoints (This is complete, just need to change shortcut webhook URL once hosted)
+    Update routes/webhook.js to update with all stories from an iteration by itself. 
 ```
 
-#####
+##### Links
 https://developers.google.com/sheets/api/samples/writing
-#####
 https://shortcut.com/api/rest/v3
-#####
 https://shortcut.com/api/webhook/v1#Introduction
 
 ##### Usage
