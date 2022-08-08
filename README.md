@@ -6,9 +6,9 @@ TODO:
 ```
 
 ##### Links
-https://developers.google.com/sheets/api/samples/writing
-https://shortcut.com/api/rest/v3
-https://shortcut.com/api/webhook/v1#Introduction
+# https://developers.google.com/sheets/api/samples/writing
+# https://shortcut.com/api/rest/v3
+# https://shortcut.com/api/webhook/v1#Introduction
 
 ##### Usage
 Read and writes to Googlesheets with data received from Shortcut API, utilizing Google oAuth.
