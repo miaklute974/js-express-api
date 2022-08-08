@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const { google } = require('googleapis');
+const { getIterationStories } = require('./../shortcut/shortcut');
 require('./../shortcut/shortcut')
 require('dotenv').config();
 require("./google-oauth-generate-url")
@@ -65,82 +66,25 @@ async function writeIterationToGoogleSheet() {
   //Spreadsheet ID of our target
   const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID
 
-  storyArray = await foo()
+  storyArray = await getIterationStories()
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: "Sheet1!A:Z",
     valueInputOption: "USER_ENTERED",
     resource: {
-      values: storyArray, //[dataArray],
+      values: storyArray,
     }
   }).then((res) => {
     console.log(`Status: ${res.status}`);
     return true
   }).catch((err) => {
-    console.error(err);
+    if (JSON.stringify(err.response.status) == 401){
+      console.log('401 unauthorized');
+      fs.unlink(`${__dirname}\\google-oauth-token.json`)
+    }
   });
 
 };
-
-
-const axios = require('axios');
-const { foo } = require('./../shortcut/shortcut');
-
-const token = '3Z0WQgO7S5LMCI52xDRuiaqmq5ItIpkxNl-9EpNOK0Q'
-const HEADERS = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }
-
-const container = 3009
-const base_url = `https://containers.netyield.com:${container}/api/v2`
-
-
-async function createAccount(gsDataArray) {
-
-  const options = {
-    method: 'POST',
-    url: `${base_url}/accounts`,
-    headers: HEADERS,
-    data: {
-      account_type_id: gsDataArray[0],
-      name: gsDataArray[1],
-      number: gsDataArray[2],
-      active: gsDataArray[3],
-      check_number_index: gsDataArray[4],
-      cost_center_id: gsDataArray[5],
-      wire_number_index: gsDataArray[6]
-    }
-
-  };
-
-  await axios(options)
-    .then((res) => {
-      console.log(JSON.stringify(res.data, null, 4))
-    })
-    .catch((error) => {
-      console.log(error)
-    });
-
-  console.log(options.data)
-
-};
-
-
-async function createAccountsFromGS() {
-  data = await readGoogleSheet()
-    .then((res) => {
-      res.forEach(element => {
-        console.log(element);
-        createAccount(element)
-          .then((res) => {
-            console.log(res)
-          })
-      });
-    })
-
-};
-
-
-// createAccountsFromGS()
-
 
 module.exports = { writeGoogleSheet, getAuth, writeIterationToGoogleSheet }

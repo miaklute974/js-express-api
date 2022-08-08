@@ -19,16 +19,16 @@ router.get('/', async (req, res) => {
 
     try {
         await sheet.writeIterationToGoogleSheet()
-    } catch (error) {
-        console.log(error);
+        res.redirect("/success")
+    }
+    catch (error) { 
         await token.getToken(code)
 
+        // instead of redirect /auth, try once more to avoid loop.
         console.log('Trying again...')
         await sheet.writeIterationToGoogleSheet()
+        res.redirect('/success')
     }
-
-    res.redirect("/success")
-
 });
 
 

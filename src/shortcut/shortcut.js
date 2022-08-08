@@ -46,8 +46,8 @@ async function getIterationStoryIDs(id) {
     return await stories
 };
 
-
-async function foo() {
+// TODO : check for complete: true and story_type: chore
+async function getIterationStories() {
 
     let storyArray = []
 
@@ -154,6 +154,6 @@ async function getEpic(id) {
 };
 
 
-module.exports = { getEpic, getOwner, getStory, foo }
+module.exports = { getEpic, getOwner, getStory, getIterationStories }
 
 
